@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Consultorio Psicologico</title>
+  <link rel="stylesheet" href="../style/estilo.css">
+</head>
+
+<body>
+  <header>
+    <h1>CONSULTORIO PSICOLOGICO</h1>
+    <nav>
+      <ul>
+        <li><a href="../index.html">Inicio</a></li>
+        <li><a href="servicios.html">Servicios</a></li>
+        <li><a href="tabla.html">Horarios</a></li>
+        <li><a href="formulario.html">Contactar</a></li>
+      </ul>
+    </nav>
+  </header>
+
+  <main>
+    <div id="introduccion">
+      <h2 class="titulo">Solicitud de turno</h2>
+      <p class="descripcion"> Para solicitar un turno, completá el siguiente formulario con tus datos. 
+        Nos comunicaremos a la brevedad para confirmar tu cita.
+      </p>
+    </div>
+
+    <section class="fondo-formulario">
+      <section class="formulario">
+        <form action="confirmacion.html" method="get">
+          <!-- Nombre -->
+          <label for="nombre">Nombre completo:</label>
+          <input type="text" id="nombre" name="nombre" required placeholder="Ej: Juan Pérez">
+
+          <!-- Email -->
+          <label for="email">Correo electrónico:</label>
+          <input type="email" id="email" name="email" required placeholder="ejemplo@gmail.com">
+
+          <!-- Teléfono -->
+          <label for="telefono">Teléfono:</label>
+          <input type="tel" id="telefono" name="telefono" placeholder="+54 351 123-4567">
+
+          <!-- Motivo -->
+          <fieldset>
+            <legend>Motivo de la consulta:</legend>
+            <div class="opciones-radio">
+              <label><input type="radio" name="motivo" value="asesoria" required> Asesoría</label>
+              <label><input type="radio" name="motivo" value="sesion"> Sesión individual</label>
+              <label><input type="radio" name="motivo" value="familiar"> Asesoramiento familiar</label>
+              <label><input type="radio" name="motivo" value="otro"> Otro</label>
+            </div>
+          </fieldset>
+
+          <!-- Mensaje -->
+          <label for="mensaje">Mensaje:</label>
+          <textarea id="mensaje" name="mensaje" rows="4" placeholder="Escribí tu consulta aquí..."></textarea>
+
+          <!-- Botones -->
+          <div class="botones-form">
+            <input type="submit" value="Enviar">
+            <input type="reset" value="Limpiar">
+          </div>
+        </form>
+      </section>
+    </section>
+    
+  </main>
+
+  <footer>
+    <p>&copy; 2025 Garcia Ezequiel Gabriel.</p>
+  </footer>
+</body>
+
+</html>
