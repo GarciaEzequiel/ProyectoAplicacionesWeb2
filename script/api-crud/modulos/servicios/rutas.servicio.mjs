@@ -1,1 +1,24 @@
-// Rutas Express del CRUD de servicios: GET, POST, PUT, DELETE sobre /api-crud/servicios
+import { Router } from 'express'
+import multer from 'multer'
+import path from 'path'
+import { fileURLToPath } from 'url'
+import { getAll, getOne, post, put, remove } from './controlador.servicio.mjs'
+
+const __dirname = path.dirname(fileURLToPath(import.meta.url))
+const IMAGENES = path.join(__dirname, '../../../public/imagenes')
+
+const storage = multer.diskStorage({
+  destination: (req, file, cb) => cb(null, IMAGENES),
+  filename:    (req, file, cb) => cb(null, `${Date.now()}${path.extname(file.originalname)}`)
+})
+
+const upload = multer({ storage })
+const router = Router()
+
+router.get('/',    getAll)
+router.get('/:id', getOne)
+router.post('/',   upload.single('imagen'), post)
+router.put('/:id', upload.single('imagen'), put)
+router.delete('/:id', remove)
+
+export default router

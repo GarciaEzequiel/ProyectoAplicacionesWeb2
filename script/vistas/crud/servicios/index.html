@@ -4,7 +4,7 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Servicios — Admin</title>
-  <link rel="stylesheet" href="../../../public/admin.css" />
+  <link rel="stylesheet" href="../style/admin.css" />
 </head>
 <body>
 
@@ -53,5 +53,50 @@
 
   </main>
 
+
+<script>
+  const tbody    = document.getElementById('tabla-servicios')
+  const msgExito = document.getElementById('msg-exito')
+  const msgError = document.getElementById('msg-error')
+
+  function mostrar(el) {
+    el.style.display = 'block'
+    setTimeout(() => { el.style.display = 'none' }, 3000)
+  }
+
+  async function cargarServicios() {
+    try {
+      const res = await fetch('/api-crud/servicios')
+      const servicios = await res.json()
+      tbody.innerHTML = servicios.map(s => `
+        <tr>
+          <td>${s.id}</td>
+          <td>${s.nombre}</td>
+          <td>${s.descripcion}</td>
+          <td>${s.imagen ? `<img src="/imagenes/${s.imagen}" alt="${s.nombre}" style="width:60px;height:60px;object-fit:cover;border-radius:4px;">` : '—'}</td>
+          <td>
+            <a class="btn btn-editar" href="modificarServicio.html?id=${s.id}">Editar</a>
+            <button class="btn btn-eliminar" onclick="eliminar(${s.id})">Eliminar</button>
+          </td>
+        </tr>
+      `).join('')
+    } catch {
+      mostrar(msgError)
+    }
+  }
+
+  async function eliminar(id) {
+    if (!confirm('¿Eliminar este servicio?')) return
+    try {
+      const res = await fetch(`/api-crud/servicios/${id}`, { method: 'DELETE' })
+      if (res.ok) { mostrar(msgExito); cargarServicios() }
+      else mostrar(msgError)
+    } catch {
+      mostrar(msgError)
+    }
+  }
+
+  cargarServicios()
+</script>
 </body>
 </html>

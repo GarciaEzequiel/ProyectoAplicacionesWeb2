@@ -4,7 +4,7 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Agregar servicio — Admin</title>
-  <link rel="stylesheet" href="../../../public/admin.css" />
+  <link rel="stylesheet" href="../style/admin.css" />
 </head>
 <body>
 
@@ -68,5 +68,27 @@
     </form>
   </main>
 
+
+<script>
+  document.getElementById('form-alta').addEventListener('submit', async (e) => {
+    e.preventDefault()
+    const msgExito = document.getElementById('msg-exito')
+    const msgError = document.getElementById('msg-error')
+    try {
+      const res = await fetch('/api-crud/servicios', { method: 'POST', body: new FormData(e.target) })
+      if (res.ok) {
+        msgExito.style.display = 'block'
+        e.target.reset()
+        setTimeout(() => { msgExito.style.display = 'none' }, 3000)
+      } else {
+        msgError.style.display = 'block'
+        setTimeout(() => { msgError.style.display = 'none' }, 3000)
+      }
+    } catch {
+      msgError.style.display = 'block'
+      setTimeout(() => { msgError.style.display = 'none' }, 3000)
+    }
+  })
+</script>
 </body>
 </html>

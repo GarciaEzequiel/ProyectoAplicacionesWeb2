@@ -4,7 +4,7 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Modificar servicio — Admin</title>
-  <link rel="stylesheet" href="../../../public/admin.css" />
+  <link rel="stylesheet" href="../style/admin.css" />
 </head>
 <body>
 
@@ -72,5 +72,47 @@
     </form>
   </main>
 
+
+<script>
+  const params   = new URLSearchParams(window.location.search)
+  const id       = params.get('id')
+  const msgExito = document.getElementById('msg-exito')
+  const msgError = document.getElementById('msg-error')
+
+  async function cargarServicio() {
+    try {
+      const res = await fetch(`/api-crud/servicios/${id}`)
+      const s   = await res.json()
+      document.getElementById('nombre').value      = s.nombre
+      document.getElementById('descripcion').value = s.descripcion
+      if (s.imagen) {
+        const preview  = document.getElementById('imagen-preview')
+        preview.src    = `/imagenes/${s.imagen}`
+        preview.style.display = 'block'
+      }
+    } catch {
+      msgError.style.display = 'block'
+    }
+  }
+
+  document.getElementById('form-modificar').addEventListener('submit', async (e) => {
+    e.preventDefault()
+    try {
+      const res = await fetch(`/api-crud/servicios/${id}`, { method: 'PUT', body: new FormData(e.target) })
+      if (res.ok) {
+        msgExito.style.display = 'block'
+        setTimeout(() => { msgExito.style.display = 'none' }, 3000)
+      } else {
+        msgError.style.display = 'block'
+        setTimeout(() => { msgError.style.display = 'none' }, 3000)
+      }
+    } catch {
+      msgError.style.display = 'block'
+      setTimeout(() => { msgError.style.display = 'none' }, 3000)
+    }
+  })
+
+  cargarServicio()
+</script>
 </body>
 </html>
