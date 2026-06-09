@@ -1,0 +1,275 @@
+/* =====================
+   Tokens
+   ===================== */
+:root {
+  --primary:    #a39b8b;
+  --secondary:  #cdc5b4;
+  --dark:       #68655d;
+  --danger:     #8b4a42;
+  --light:      #f9f8f6;
+  --white:      #ffffff;
+  --border:     #ddd;
+  --radius:     8px;
+  --shadow:     0 2px 8px rgba(0, 0, 0, 0.12);
+  --transition: 0.3s ease;
+}
+
+/* =====================
+   Reset
+   ===================== */
+*, *::before, *::after { box-sizing: border-box; }
+
+body {
+  margin: 0;
+  background-color: var(--secondary);
+  color: var(--dark);
+  font-family: system-ui, -apple-system, sans-serif;
+  font-size: 16px;
+}
+
+/* =====================
+   Navbar
+   ===================== */
+.admin-nav {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background-color: var(--primary);
+  padding: 0 32px;
+  height: 60px;
+  box-shadow: var(--shadow);
+}
+
+.admin-nav .nav-brand {
+  color: var(--white);
+  font-size: 20px;
+  font-weight: 700;
+  text-decoration: none;
+  letter-spacing: 1px;
+}
+
+.admin-nav ul {
+  list-style: none;
+  display: flex;
+  gap: 8px;
+  margin: 0;
+  padding: 0;
+}
+
+.admin-nav ul li a {
+  color: var(--white);
+  text-decoration: none;
+  font-size: 15px;
+  padding: 6px 14px;
+  border-radius: var(--radius);
+  transition: background var(--transition);
+}
+
+.admin-nav ul li a:hover,
+.admin-nav ul li a.active {
+  background-color: var(--dark);
+}
+
+/* =====================
+   Main container
+   ===================== */
+.admin-main {
+  max-width: 960px;
+  margin: 36px auto;
+  padding: 0 20px;
+}
+
+.admin-main h1,
+.admin-main h2 {
+  color: var(--dark);
+  margin-bottom: 16px;
+}
+
+/* =====================
+   Tables
+   ===================== */
+.admin-table-wrapper {
+  overflow-x: auto;
+}
+
+.admin-table {
+  width: 100%;
+  border-collapse: collapse;
+  background: var(--white);
+  border-radius: var(--radius);
+  overflow: hidden;
+  box-shadow: var(--shadow);
+}
+
+.admin-table thead {
+  background-color: var(--primary);
+  color: var(--white);
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  font-size: 0.85em;
+}
+
+.admin-table th,
+.admin-table td {
+  padding: 12px 16px;
+  text-align: left;
+  border-bottom: 1px solid var(--border);
+  font-size: 0.95em;
+}
+
+.admin-table tbody tr:last-child td { border-bottom: none; }
+
+.admin-table tbody tr:hover { background-color: var(--light); }
+
+.admin-table .col-acciones { white-space: nowrap; }
+
+/* =====================
+   Botones
+   ===================== */
+.btn {
+  display: inline-block;
+  padding: 8px 18px;
+  border: none;
+  border-radius: var(--radius);
+  font-size: 0.9em;
+  cursor: pointer;
+  text-decoration: none;
+  transition: background var(--transition), transform var(--transition);
+  font-family: inherit;
+}
+
+.btn:hover { transform: scale(1.03); }
+
+.btn-agregar {
+  background-color: var(--primary);
+  color: var(--white);
+}
+.btn-agregar:hover { background-color: var(--dark); }
+
+.btn-editar {
+  background-color: var(--dark);
+  color: var(--white);
+}
+.btn-editar:hover { background-color: #4a4840; }
+
+.btn-eliminar {
+  background-color: var(--danger);
+  color: var(--white);
+}
+.btn-eliminar:hover { background-color: #6e3830; }
+
+.btn-cancelar {
+  background-color: var(--secondary);
+  color: var(--dark);
+  border: 1px solid var(--border);
+}
+.btn-cancelar:hover { background-color: #b8b0a0; color: var(--white); }
+
+/* =====================
+   Formularios
+   ===================== */
+.admin-form {
+  background: var(--white);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow);
+  padding: 32px;
+  max-width: 540px;
+}
+
+.form-group {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  margin-bottom: 20px;
+}
+
+.form-group label {
+  font-size: 0.9em;
+  font-weight: 600;
+  color: var(--dark);
+}
+
+.form-group input,
+.form-group textarea {
+  padding: 10px 12px;
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  font-size: 1em;
+  font-family: inherit;
+  transition: border-color var(--transition);
+}
+
+.form-group input:focus,
+.form-group textarea:focus {
+  outline: none;
+  border-color: var(--primary);
+  box-shadow: 0 0 0 3px rgba(163, 155, 139, 0.2);
+}
+
+.form-group textarea { resize: vertical; min-height: 90px; }
+
+.form-actions {
+  display: flex;
+  gap: 12px;
+  margin-top: 8px;
+}
+
+/* =====================
+   Alertas
+   ===================== */
+.alert {
+  padding: 12px 16px;
+  border-radius: var(--radius);
+  margin-bottom: 20px;
+  font-size: 0.95em;
+}
+
+.alert-success {
+  background-color: #d4e6cc;
+  color: #3a5c30;
+  border-left: 4px solid #5a8f50;
+}
+
+.alert-error {
+  background-color: #edd5d3;
+  color: #6e3830;
+  border-left: 4px solid var(--danger);
+}
+
+/* =====================
+   Tarjetas de sección (index del admin)
+   ===================== */
+.admin-cards {
+  display: flex;
+  gap: 20px;
+  flex-wrap: wrap;
+}
+
+.admin-card {
+  background: var(--white);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow);
+  padding: 28px 32px;
+  min-width: 220px;
+  text-decoration: none;
+  color: var(--dark);
+  transition: transform var(--transition), box-shadow var(--transition);
+}
+
+.admin-card:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.15);
+}
+
+.admin-card h3 { margin: 0 0 8px; font-size: 1.15em; color: var(--dark); }
+.admin-card p  { margin: 0; font-size: 0.9em; color: var(--primary); }
+
+/* =====================
+   Toolbar sobre tabla
+   ===================== */
+.table-toolbar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 16px;
+}

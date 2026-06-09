@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Agregar servicio — Admin</title>
+  <link rel="stylesheet" href="../../../public/admin.css" />
+</head>
+<body>
+
+  <nav class="admin-nav">
+    <a class="nav-brand" href="../index.html">Admin — Consultorio</a>
+    <ul>
+      <li><a href="index.html">Servicios</a></li>
+    </ul>
+  </nav>
+
+  <main class="admin-main">
+    <h2>Agregar servicio</h2>
+
+    <div class="alert alert-success" style="display:none;" id="msg-exito">
+      Servicio agregado con éxito.
+    </div>
+    <div class="alert alert-error" style="display:none;" id="msg-error">
+      Error al agregar el servicio. Revisá los datos e intentá de nuevo.
+    </div>
+
+    <form class="admin-form" id="form-alta" enctype="multipart/form-data">
+
+      <div class="form-group">
+        <label for="nombre">Nombre</label>
+        <input
+          type="text"
+          id="nombre"
+          name="nombre"
+          placeholder="Ej: Sesión individual"
+          maxlength="150"
+          required
+        />
+      </div>
+
+      <div class="form-group">
+        <label for="descripcion">Descripción</label>
+        <textarea
+          id="descripcion"
+          name="descripcion"
+          placeholder="Breve descripción del servicio"
+          maxlength="255"
+          required
+        ></textarea>
+      </div>
+
+      <div class="form-group">
+        <label for="imagen">Imagen</label>
+        <input
+          type="file"
+          id="imagen"
+          name="imagen"
+          accept="image/*"
+        />
+      </div>
+
+      <div class="form-actions">
+        <button type="submit" class="btn btn-agregar">Guardar</button>
+        <a class="btn btn-cancelar" href="index.html">Cancelar</a>
+      </div>
+
+    </form>
+  </main>
+
+</body>
+</html>

@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Servicios — Admin</title>
+  <link rel="stylesheet" href="../../../public/admin.css" />
+</head>
+<body>
+
+  <nav class="admin-nav">
+    <a class="nav-brand" href="../index.html">Admin — Consultorio</a>
+    <ul>
+      <li><a href="index.html" class="active">Servicios</a></li>
+    </ul>
+  </nav>
+
+  <main class="admin-main">
+
+    <div class="alert alert-success" style="display:none;" id="msg-exito">
+      Operación realizada con éxito.
+    </div>
+    <div class="alert alert-error" style="display:none;" id="msg-error">
+      Ocurrió un error. Intentá de nuevo.
+    </div>
+
+    <div class="table-toolbar">
+      <h2>Servicios</h2>
+      <a class="btn btn-agregar" href="altaServicio.html">+ Agregar servicio</a>
+    </div>
+
+    <div class="admin-table-wrapper">
+      <table class="admin-table">
+        <thead>
+          <tr>
+            <th>#</th>
+            <th>Nombre</th>
+            <th>Descripción</th>
+            <th>Imagen</th>
+            <th class="col-acciones">Acciones</th>
+          </tr>
+        </thead>
+        <tbody id="tabla-servicios">
+          <!-- Las filas se generarán dinámicamente con JS -->
+          <tr>
+            <td colspan="5" style="text-align:center; color:#a39b8b;">
+              Cargando servicios…
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+  </main>
+
+</body>
+</html>

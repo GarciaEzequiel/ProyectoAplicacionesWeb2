@@ -2,10 +2,10 @@
   "name": "proyectoaplicacionesweb2",
   "version": "1.0.0",
   "description": "",
-  "main": "index.js",
+  "main": "servidor.mjs",
   "scripts": {
-    "dev": "node --watch index.mjs",
-    "start": "node index.mjs"
+    "dev": "node --watch servidor.mjs",
+    "start": "node servidor.mjs"
   },
   "repository": {
     "type": "git",
@@ -20,6 +20,8 @@
   },
   "homepage": "https://github.com/federicotissera/ProyectoAplicacionesWeb2#readme",
   "dependencies": {
-    "express": "5.2.1"
+    "express": "5.2.1",
+    "multer": "^2.1.1",
+    "pg": "^8.21.0"
   }
 }
