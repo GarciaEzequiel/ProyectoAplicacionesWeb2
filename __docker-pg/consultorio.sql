@@ -8,6 +8,12 @@ CREATE TABLE servicios (
     imagen VARCHAR(200) NOT NULL
 );
 
+CREATE TABLE usuarios (
+    id SERIAL PRIMARY KEY,
+    usuario VARCHAR(100) UNIQUE NOT NULL,
+    clave VARCHAR(255) NOT NULL
+);
+
 INSERT INTO servicios (nombre, descripcion, imagen) VALUES
     ('Puericultura', 'Acompañamiento en el cuidado y crianza de bebés y niños pequeños.', 'Puericultura.png'),
     ('Orientación Vocacional', 'Sesiones para jóvenes y adultos que buscan definir su camino académico o laboral.', 'orientacion_vocacional.png'),

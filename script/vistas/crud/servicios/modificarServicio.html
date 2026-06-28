@@ -12,11 +12,17 @@
     <a class="nav-brand" href="../index.html">Admin — Consultorio</a>
     <ul>
       <li><a href="index.html">Servicios</a></li>
+      <li><span class="nav-usuario" id="nav-usuario"></span></li>
+      <li><button class="btn-nav-logout" id="btn-logout">Cerrar sesión</button></li>
     </ul>
   </nav>
 
   <main class="admin-main">
     <h2>Modificar servicio</h2>
+
+    <div class="alert alert-error" style="display:none;" id="msg-sin-sesion">
+      Sesión no válida. <a href="../index.html">Iniciá sesión desde el panel principal.</a>
+    </div>
 
     <div class="alert alert-success" style="display:none;" id="msg-exito">
       Servicio modificado con éxito.
@@ -27,7 +33,6 @@
 
     <form class="admin-form" id="form-modificar" enctype="multipart/form-data">
 
-      <!-- El id del servicio se pasará por querystring (?id=...) y se cargará con JS -->
       <input type="hidden" id="id" name="id" />
 
       <div class="form-group">
@@ -53,7 +58,6 @@
 
       <div class="form-group">
         <label for="imagen">Imagen actual</label>
-        <!-- Se mostrará la imagen actual cuando se cargue el servicio con JS -->
         <img id="imagen-preview" src="" alt="" style="display:none; max-width:200px; border-radius:8px; margin-bottom:8px;" />
         <label for="imagen-nueva">Reemplazar imagen (opcional)</label>
         <input
@@ -74,10 +78,11 @@
 
 
 <script>
-  const params   = new URLSearchParams(window.location.search)
-  const id       = params.get('id')
-  const msgExito = document.getElementById('msg-exito')
-  const msgError = document.getElementById('msg-error')
+  const params       = new URLSearchParams(window.location.search)
+  const id           = params.get('id')
+  const msgExito     = document.getElementById('msg-exito')
+  const msgError     = document.getElementById('msg-error')
+  const msgSinSesion = document.getElementById('msg-sin-sesion')
 
   async function cargarServicio() {
     try {
@@ -99,6 +104,10 @@
     e.preventDefault()
     try {
       const res = await fetch(`/api-crud/servicios/${id}`, { method: 'PUT', body: new FormData(e.target) })
+      if (res.status === 401) {
+        msgSinSesion.style.display = 'block'
+        return
+      }
       if (res.ok) {
         msgExito.style.display = 'block'
         setTimeout(() => { msgExito.style.display = 'none' }, 3000)
@@ -111,6 +120,22 @@
       setTimeout(() => { msgError.style.display = 'none' }, 3000)
     }
   })
+
+  // Logout
+  document.getElementById('btn-logout').addEventListener('click', async () => {
+    try { await fetch('/api-crud/auth/logout', { method: 'POST' }) } catch {}
+    document.querySelector('.admin-main').innerHTML =
+      '<div class="alert alert-success">Sesión cerrada. <a href="../index.html">Volvé al panel de acceso.</a></div>'
+  })
+
+  // Muestra nombre de usuario si hay sesión
+  fetch('/api-crud/auth/verificar')
+    .then(r => r.ok ? r.json() : null)
+    .then(data => {
+      if (data) document.getElementById('nav-usuario').textContent = data.usuario
+      else msgSinSesion.style.display = 'block'
+    })
+    .catch(() => {})
 
   cargarServicio()
 </script>

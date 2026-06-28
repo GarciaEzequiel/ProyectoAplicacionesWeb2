@@ -8,30 +8,194 @@
 </head>
 <body>
 
-  <nav class="admin-nav">
-    <a class="nav-brand" href="index.html">Admin — Consultorio</a>
-    <ul>
-      <li><a href="servicios/index.html" class="active">Servicios</a></li>
-    </ul>
-  </nav>
+  <!-- ============================
+       SECCIÓN AUTH (login / registro)
+       Visible por defecto; se oculta cuando hay sesión activa
+       ============================ -->
+  <div id="seccion-auth" class="auth-wrapper">
+    <div class="auth-card">
+      <h1 class="auth-title">Consultorio — Acceso</h1>
 
-  <main class="admin-main">
-    <h1>Panel de administración</h1>
+      <div class="alert alert-error"   style="display:none;" id="auth-msg-error"></div>
+      <div class="alert alert-success" style="display:none;" id="auth-msg-exito"></div>
 
-    <div class="alert alert-success" style="display:none;" id="msg-exito">
-      Operación realizada con éxito.
+      <!-- Tabs -->
+      <div class="auth-tabs">
+        <button class="auth-tab active" id="tab-login"   onclick="mostrarTab('login')">Iniciar sesión</button>
+        <button class="auth-tab"        id="tab-registro" onclick="mostrarTab('registro')">Registrarse</button>
+      </div>
+
+      <!-- Form login -->
+      <form class="admin-form auth-form" id="form-login">
+        <div class="form-group">
+          <label for="login-usuario">Usuario</label>
+          <input type="text" id="login-usuario" name="usuario" autocomplete="username" required />
+        </div>
+        <div class="form-group">
+          <label for="login-clave">Contraseña</label>
+          <input type="password" id="login-clave" name="clave" autocomplete="current-password" required />
+        </div>
+        <div class="form-actions">
+          <button type="submit" class="btn btn-agregar">Ingresar</button>
+        </div>
+      </form>
+
+      <!-- Form registro -->
+      <form class="admin-form auth-form" id="form-registro" style="display:none;">
+        <div class="form-group">
+          <label for="reg-usuario">Usuario</label>
+          <input type="text" id="reg-usuario" name="usuario" autocomplete="username" required />
+        </div>
+        <div class="form-group">
+          <label for="reg-clave">Contraseña</label>
+          <input type="password" id="reg-clave" name="clave" autocomplete="new-password" required />
+        </div>
+        <div class="form-actions">
+          <button type="submit" class="btn btn-agregar">Registrarse</button>
+        </div>
+      </form>
     </div>
-    <div class="alert alert-error" style="display:none;" id="msg-error">
-      Ocurrió un error. Intentá de nuevo.
-    </div>
+  </div>
 
-    <div class="admin-cards">
-      <a class="admin-card" href="servicios/index.html">
-        <h3>Servicios</h3>
-        <p>Gestionar servicios del consultorio</p>
-      </a>
-    </div>
-  </main>
+  <!-- ============================
+       SECCIÓN ADMIN (panel)
+       Oculta por defecto; se muestra cuando hay sesión activa
+       ============================ -->
+  <div id="seccion-admin" style="display:none;">
+    <nav class="admin-nav">
+      <a class="nav-brand" href="#">Admin — Consultorio</a>
+      <ul>
+        <li><a href="servicios/index.html">Servicios</a></li>
+        <li>
+          <span class="nav-usuario" id="nav-usuario"></span>
+        </li>
+        <li>
+          <button class="btn-nav-logout" id="btn-logout">Cerrar sesión</button>
+        </li>
+      </ul>
+    </nav>
 
+    <main class="admin-main">
+      <h1>Panel de administración</h1>
+
+      <div class="admin-cards">
+        <a class="admin-card" href="servicios/index.html">
+          <h3>Servicios</h3>
+          <p>Gestionar servicios del consultorio</p>
+        </a>
+      </div>
+    </main>
+  </div>
+
+
+<script>
+  const seccionAuth  = document.getElementById('seccion-auth')
+  const seccionAdmin = document.getElementById('seccion-admin')
+  const msgError     = document.getElementById('auth-msg-error')
+  const msgExito     = document.getElementById('auth-msg-exito')
+
+  function mostrarError(texto) {
+    msgError.textContent = texto
+    msgError.style.display = 'block'
+    msgExito.style.display = 'none'
+  }
+
+  function mostrarExito(texto) {
+    msgExito.textContent = texto
+    msgExito.style.display = 'block'
+    msgError.style.display = 'none'
+  }
+
+  function mostrarTab(tab) {
+    const esLogin = tab === 'login'
+    document.getElementById('form-login').style.display    = esLogin ? 'block' : 'none'
+    document.getElementById('form-registro').style.display = esLogin ? 'none'  : 'block'
+    document.getElementById('tab-login').classList.toggle('active',    esLogin)
+    document.getElementById('tab-registro').classList.toggle('active', !esLogin)
+    msgError.style.display = 'none'
+    msgExito.style.display = 'none'
+  }
+
+  function mostrarPanel(usuario) {
+    seccionAuth.style.display  = 'none'
+    seccionAdmin.style.display = 'block'
+    document.getElementById('nav-usuario').textContent = usuario
+  }
+
+  function mostrarAuth() {
+    seccionAdmin.style.display = 'none'
+    seccionAuth.style.display  = 'flex'
+  }
+
+  // Al cargar la página verificamos si ya hay sesión activa
+  async function verificarSesion() {
+    try {
+      const res = await fetch('/api-crud/auth/verificar')
+      if (res.ok) {
+        const data = await res.json()
+        mostrarPanel(data.usuario)
+      }
+    } catch {
+      // Sin sesión: deja la sección auth visible
+    }
+  }
+
+  // Login
+  document.getElementById('form-login').addEventListener('submit', async (e) => {
+    e.preventDefault()
+    const usuario = document.getElementById('login-usuario').value.trim()
+    const clave   = document.getElementById('login-clave').value
+    try {
+      const res  = await fetch('/api-crud/auth/login', {
+        method:  'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body:    JSON.stringify({ usuario, clave })
+      })
+      const data = await res.json()
+      if (res.ok) {
+        mostrarPanel(data.usuario)
+        e.target.reset()
+      } else {
+        mostrarError(data.error ?? 'Error al iniciar sesión')
+      }
+    } catch {
+      mostrarError('No se pudo conectar con el servidor')
+    }
+  })
+
+  // Registro
+  document.getElementById('form-registro').addEventListener('submit', async (e) => {
+    e.preventDefault()
+    const usuario = document.getElementById('reg-usuario').value.trim()
+    const clave   = document.getElementById('reg-clave').value
+    try {
+      const res  = await fetch('/api-crud/auth/registro', {
+        method:  'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body:    JSON.stringify({ usuario, clave })
+      })
+      const data = await res.json()
+      if (res.ok) {
+        mostrarPanel(data.usuario)
+        e.target.reset()
+      } else {
+        mostrarError(data.error ?? 'Error al registrarse')
+      }
+    } catch {
+      mostrarError('No se pudo conectar con el servidor')
+    }
+  })
+
+  // Logout
+  document.getElementById('btn-logout').addEventListener('click', async () => {
+    try {
+      await fetch('/api-crud/auth/logout', { method: 'POST' })
+    } finally {
+      mostrarAuth()
+    }
+  })
+
+  verificarSesion()
+</script>
 </body>
 </html>

@@ -12,10 +12,16 @@
     <a class="nav-brand" href="../index.html">Admin — Consultorio</a>
     <ul>
       <li><a href="index.html" class="active">Servicios</a></li>
+      <li><span class="nav-usuario" id="nav-usuario"></span></li>
+      <li><button class="btn-nav-logout" id="btn-logout">Cerrar sesión</button></li>
     </ul>
   </nav>
 
   <main class="admin-main">
+
+    <div class="alert alert-error" style="display:none;" id="msg-sin-sesion">
+      Sesión no válida. <a href="../index.html">Iniciá sesión desde el panel principal.</a>
+    </div>
 
     <div class="alert alert-success" style="display:none;" id="msg-exito">
       Operación realizada con éxito.
@@ -41,7 +47,6 @@
           </tr>
         </thead>
         <tbody id="tabla-servicios">
-          <!-- Las filas se generarán dinámicamente con JS -->
           <tr>
             <td colspan="5" style="text-align:center; color:#a39b8b;">
               Cargando servicios…
@@ -55,9 +60,10 @@
 
 
 <script>
-  const tbody    = document.getElementById('tabla-servicios')
-  const msgExito = document.getElementById('msg-exito')
-  const msgError = document.getElementById('msg-error')
+  const tbody       = document.getElementById('tabla-servicios')
+  const msgExito    = document.getElementById('msg-exito')
+  const msgError    = document.getElementById('msg-error')
+  const msgSinSesion = document.getElementById('msg-sin-sesion')
 
   function mostrar(el) {
     el.style.display = 'block'
@@ -89,12 +95,33 @@
     if (!confirm('¿Eliminar este servicio?')) return
     try {
       const res = await fetch(`/api-crud/servicios/${id}`, { method: 'DELETE' })
+      if (res.status === 401) {
+        msgSinSesion.style.display = 'block'
+        return
+      }
       if (res.ok) { mostrar(msgExito); cargarServicios() }
       else mostrar(msgError)
     } catch {
       mostrar(msgError)
     }
   }
+
+  // Logout
+  document.getElementById('btn-logout').addEventListener('click', async () => {
+    try { await fetch('/api-crud/auth/logout', { method: 'POST' }) } catch {}
+    // Muestra mensaje sin usar window.location
+    document.querySelector('.admin-main').innerHTML =
+      '<div class="alert alert-success">Sesión cerrada. <a href="../index.html">Volvé al panel de acceso.</a></div>'
+  })
+
+  // Muestra nombre de usuario si hay sesión
+  fetch('/api-crud/auth/verificar')
+    .then(r => r.ok ? r.json() : null)
+    .then(data => {
+      if (data) document.getElementById('nav-usuario').textContent = data.usuario
+      else msgSinSesion.style.display = 'block'
+    })
+    .catch(() => {})
 
   cargarServicios()
 </script>
